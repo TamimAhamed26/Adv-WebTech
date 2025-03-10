@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login Form</title>
+</head>
+<body>
+    <h2>🔑 User Login</h2>
+    <label>Username: <input type="text" id="username"></label>
+    <button onclick="loginUser()">Login</button>
+
+    <script>
+        function loginUser() {
+            let user = document.getElementById("username").value;
+            if (user) {
+                alert(`Welcome, ${user}! 🎉`);
+            } else {
+                alert("⚠️ Please enter your username!");
+            }
+        }
+    </script>
+</body>
+</html>

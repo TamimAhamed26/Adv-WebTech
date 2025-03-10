@@ -1,0 +1,2 @@
+Hello, this is Node.js! Synchronous Method (Blocking)
+Appended content!
