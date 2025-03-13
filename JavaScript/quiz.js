@@ -605,3 +605,24 @@ console.log(1 + "1" - 1);//output: 10// "1" is concatenated to 1, then subtracte
 console.log(!!"");//output: false// !! converts the value to a boolean
 
 console.log(5 === "5")//output: false// === compares the value and type // == compares only value
+
+
+function fetchData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve("Network error"), 2000);
+  });
+}
+
+async function getData() {
+  try {
+    console.log("Fetching data...");
+    let data = await fetchData();
+    console.log("Received:", data);
+  } catch (error) {
+    console.error("Error:", error);
+  } finally {
+    console.log("Process finished.");
+  }
+}
+
+getData();

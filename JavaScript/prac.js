@@ -195,3 +195,21 @@ console.log((0.1 + 0.2).toFixed(1) === "0.3");//true // toFixed() method to roun
                                                     // 0.1 + 0.2 = 0.3000000000000000 toFixed(1) = 0.3
 console.log("100" - "50" + "10" * 2);
 
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function processSteps() {
+  console.log("Step 1: Start");
+  
+  await delay(1000); // Wait 1 second
+  console.log("Step 2: Load Data");
+
+  await delay(2000); // Wait 2 seconds
+  console.log("Step 3: Process Data");
+
+  await delay(1000); // Wait 1 second
+  console.log("Step 4: Complete");
+}
+
+processSteps();

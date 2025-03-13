@@ -1,3 +1,4 @@
+/*
 // Simulating a user authentication system with callbacks, promises, and async/await
 
 // Step 1: Simulating user login using a Callback
@@ -120,3 +121,90 @@ const ret = arr.filter(num => num > 4).map(num => num - 1);
 console.log(`5,6,8`,ret)
 
 
+*/
+
+//promises
+const myPromise = new Promise((resolve, reject) => {  
+    // PROMISE is a constructor that takes a function with two parameters: resolve and reject
+    // PENDING is the initial state of a promise
+    console.log("Task started...");
+    setTimeout(() => {
+        let success = Math.random() > 0.5; // Randomly deciding success or failure
+        if (success) {
+            resolve("Task completed!"); // Resolving promise
+        } else {
+            reject("Task failed!"); // Rejecting promise
+        }
+    }, 2000); // Simulates an async operation with a 2-second delay
+});
+
+// Using the Promise
+myPromise
+    .then((message) => console.log("Success:", message)) // Runs if resolved // THEN is used to handle the resolved promise
+    .catch((error) => console.log("Error:", error)) // Runs if rejected // CATCH is used to handle the rejected promise
+    .finally(() => console.log("Process finished.")); // Always runs // FINALLY is used to run code after the promise is settled
+
+console.log("Task finished before promise...");
+
+// fetch data promise
+const fetchData = () => { //fetchData is a function that returns a promise
+  return new Promise((resolve) => { // it can only be resolved
+    setTimeout(() => resolve("Data received"), 1000);
+  });
+};
+
+fetchData()
+  .then((data) => {
+    console.log(data);
+    return "Processing data..."; // Returns new value for next .then()
+  })
+  .then((message) => console.log(message))
+  .catch((error) => console.error("Error:", error));
+
+  // async/await with promises
+  async function fetchDataAsync() {
+    try {
+      let data = await fetchData();
+      console.log(data);
+    } catch (err) {
+      console.log("Error:", err);
+    }
+  }
+  fetchDataAsync();
+  
+
+// difference between .then() and async/await
+  function getNumber() {
+    return new Promise((resolve) => setTimeout(() => resolve(42), 1000));
+  }
+  
+  // Using .then()
+  getNumber().then((num) => console.log(num));
+  
+  // Using async/await
+  async function getAsyncNumber() {
+    let num = await getNumber();
+    console.log(num);
+  }
+  getAsyncNumber();
+  
+
+  function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+  
+  async function processSteps() {
+    console.log("Step 1: Start");
+    
+    await delay(1000); // Wait 1 second
+    console.log("Step 2: Load Data");
+  
+    await delay(2000); // Wait 2 seconds
+    console.log("Step 3: Process Data");
+  
+    await delay(1000); // Wait 1 second
+    console.log("Step 4: Complete");
+  }
+  
+  processSteps();
+  
