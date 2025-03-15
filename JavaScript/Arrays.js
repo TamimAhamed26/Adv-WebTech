@@ -181,6 +181,13 @@ const obj1 = {
 
 obj1.greet(); // ✅ Output: "Alice"
 
+/*
+const obi = {
+  value: 10,
+  getValue: () => console.log(this.value) // Output: undefined
+};
+obi.getValue();// Arrow functions do not have their own this, so this.value refers to the outer scope, which does not have value.
+*/
 
 const obj2 = {
   name: 'Object',
