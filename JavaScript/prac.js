@@ -7,7 +7,7 @@ class Test {
     constructor() {
       this.x = 110;
     }
-    arrow = () => console.log(this.x);
+    arrow = () => console.log(this.x); // 110
   }
   const obj = new Test();
   const fn = obj.arrow;
@@ -30,7 +30,7 @@ function regular() {
     console.log(arguments);
 }
 regular(1, 2, 3); 
-// Output: Arguments(3) [1, 2, 3, calleed: ƒ, Symbol(Symbol.iterator): ƒ]
+// Output: Arguments(3) [1, 2, 3, called: ƒ, Symbol(Symbol.iterator): ƒ]
 
 const arrow = (...args) => {
     console.log(args);
@@ -53,31 +53,32 @@ function outer(callback) {
   function greetS(name = "Guest") {
     console.log(`Hello, ${name}!`);
   }
-  greetS();
+  greetS(); // Output: Hello, Guest!
+
   function multiply(a, b = a * 2) {
     return a * b;
   }
   console.log(multiply(7)); 
 
 const add = (a, b) => a + b;
-console.log(add(2));
+console.log(add(2));//NaN // 2 + undefined = NaN // 
 
 
 function process(num, callback) {
-  console.log("Processing: " + num);
+  console.log("Processing: " + num); // Processing: 5
   return callback(num);  
 }
-console.log(process(5, num => num * 2));
+console.log(process(5, num => num * 2)); // 10
 
 
 setTimeout(() => {
-  console.log("This runs later!");
+  console.log("This runs later!"); // Output after 2s: This runs later!
 }, 2000);
-console.log("This runs first!");
+console.log("This runs first!"); // Output: This runs first!
 
 function fetchData(callback) {
   setTimeout(() => {
-    callback("Data loaded");
+    callback("Data loaded"); // callback function is called after 2 seconds
   }, 2000);
 }
 
@@ -93,11 +94,7 @@ const objd= {
 };
 objd.greet();//Output: Hello, undefined! // 
 
-console.log(1);
-setTimeout(() => console.log(2), 0);
-Promise.resolve().then(() => console.log(3));
-console.log(4);
-
+//1, 4, 3, 2
 
 class Parent {
   constructor(name) {
@@ -149,7 +146,7 @@ console.log(result);// Output: "BANANA"                              // map() me
 
 const ardr = ["apple", "banana", "cherry"];
 const resuldt = ardr.map(item => item.length).filter(length => length > 5);
-console.log(`dwwewe`,resuldt);                                                                      
+console.log(`dwwewe`,resuldt); // Output: [6, 6]                                                                     
 
 const numbers = [1, 4, 6, 9, 3];
 console.log(`dsda`,numbers.filter(num => num > 5)[0]); // ✅ Output: 6//numbers.find(num => num > 5); 
@@ -250,12 +247,13 @@ console.log(`demo 4`);
 */
 async function demo() {
   console.log(`demo 1`);
-  await Promise.resolve();
+  await Promise.resolve(); //microtask await higher priority than macrotask setTimeout
   console.log(`demo 2`);
 }
 
 console.log(`demo 3`);
-setTimeout(() => console.log(`demo 5`), 0);
+setTimeout(() => console.log(`demo 5`), 0); // macrotask runs after microtask
+//setTimeout is a macrotask, it will run after the current macrotask is completed
 demo();
 console.log(`demo 4`);
 //Output: 3, 1, 4, 2, 5

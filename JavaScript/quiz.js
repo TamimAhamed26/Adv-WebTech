@@ -193,6 +193,52 @@ function test(callback) {
 
 test(() => console.log("C")); // Output: A, B, C
 
+
+function processUserInput(callback) {  
+  console.log("Processing user input..."); // Processing user input... first
+  callback(); // callback function greetUser() is called 
+}
+
+function greetUser() {  
+  console.log("Hello, user!"); // Hello, user! is printed after Processing user input... 
+}
+
+processUserInput(greetUser);
+
+
+function fetchData(callback) {
+  console.log("Fetching data...");
+  setTimeout(() => {
+    let data = "User data";
+    callback(data);
+  }, 2000);
+}
+
+fetchData((data) => console.log("Received:", data));
+
+
+
+function getUserData(callback) {
+  setTimeout(() => {
+    console.log("User data received");
+    callback();
+  }, 1000);
+}
+
+function getPosts(callback) {
+  setTimeout(() => {
+    console.log("User posts received");
+    callback();
+  }, 1000);
+}
+
+getUserData(() => {
+  getPosts(() => {
+    console.log("All data loaded");
+  });
+});
+
+
 function test() {
   console.log(7);
   setTimeout(() => console.log(9), 1000);

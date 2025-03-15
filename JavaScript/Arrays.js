@@ -144,8 +144,8 @@ const array = [
 
 console.log(array.find(item => item.id === 2)); // Output: { id: 2, name: 'Bob' }
 console.log(array.find(item => item.id === 4)); // Output: undefined
-console.log(array.findIndex(item => item.id === 2)); // Output: 1
-console.log(array.findIndex(item => item.id === 4)); // Output: -1
+console.log(array.findIndex(item => item.id === 2)); // Output: 1 // 1 is the index of the element with id 2
+console.log(array.findIndex(item => item.id === 4)); // Output: -1 //-1 indicates that the element was not found
 
 
 
