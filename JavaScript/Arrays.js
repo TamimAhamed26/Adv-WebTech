@@ -79,7 +79,7 @@ for (let [index, elements] of tfruits.entries()) {
   console.log(`element "for-of" for`,index,`no index`,elements); // logs the elements: apple, banana, cherry
 }
 // forEach method // forEach() → Works on Arrays Arrays ([])// Does NOT work on Objects ({}), Maps, Sets, or Strings
-// forEach doesn't modify the original array map() and filter() do
+// forEach doesn't create a new array map() and filter() do. foreach can modify the original array but array.map() and array.filter() do not modify the original array but they can reassigned to the original array
 tfruits.forEach((elements, index,tfruits) => { // use forEach to iterate over the elements of an array 
 // forEach takes a callback function with the element and index as arguments
   console.log(`element "forEach"`,index,elements,tfruits); // logs the elements: apple, banana, cherry
