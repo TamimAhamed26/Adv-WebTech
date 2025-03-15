@@ -59,21 +59,29 @@ do {
 */
 
 const tfruits = ['apple', 'banana', 'cherry'];
-// for-in loop
+
+// for-in loop // Objects ({}),Arrays (but NOT recommended)
+//❌ Does NOT work on Maps, Sets, or Strings properly
 for (let index in tfruits) { // don't use for-in with arrays to iterate over the elements:use for-of instead
   console.log(`index "for-in"`,index);  // logs the index: 0, 1, 2
   //console.log(tfruits[index]);// logs the elements: apple, banana, cherry
 }
-// for-of loop
+
+// for-of loop WORKS ON Arrays ([]),Strings (""),Maps (new Map()),Sets (new Set())
+// DOES NOT WORK ON Objects ({}) //USE .ENTRIES() METHOD
+
 for (let elements of tfruits) { // use for-of to iterate over the elements of an array // 
   console.log(`element "for-of"`,elements); // logs the elements: apple, banana, cherry
 }
-// for-of loop with entries
+
+// for-of loop with entries // 
 for (let [index, elements] of tfruits.entries()) {
   console.log(`element "for-of" for`,index,`no index`,elements); // logs the elements: apple, banana, cherry
 }
-// forEach method
-tfruits.forEach((elements, index,tfruits) => { // use forEach to iterate over the elements of an array // forEach takes a callback function with the element and index as arguments
+// forEach method // forEach() → Works on Arrays Arrays ([])// Does NOT work on Objects ({}), Maps, Sets, or Strings
+// forEach doesn't modify the original array map() and filter() do
+tfruits.forEach((elements, index,tfruits) => { // use forEach to iterate over the elements of an array 
+// forEach takes a callback function with the element and index as arguments
   console.log(`element "forEach"`,index,elements,tfruits); // logs the elements: apple, banana, cherry
 });
 
@@ -86,7 +94,7 @@ for (const char of text) {
 
 const user = { name: "tamim", age: 25, country: "BD" };
 
-for (const key in user) {  // for-of wont work here
+for (const key in user) {  // for-of wont work here AS it is an object
   console.log(`${key}: ${user[key]}`);
 }
 let arr = [10, 20, 30];
@@ -118,7 +126,7 @@ const arrt = [1, 2, 3];
 
 const newArr = arrt.forEach(num => num * 2);
 
-console.log(`dss`,newArr);// Output: undefined // forEach method does not return a new array
+console.log(`dss`,newArr);// Output: undefined // forEach method does not return a new array but mofies the original array
                           // arrt = [1, 2, 3] // newArr = undefined
 /*
 arrt.forEach((num, index, arry) => {
@@ -128,6 +136,17 @@ console.log(arrt); // Output: [2, 4, 6] // forEach method modifies the original 
 */
 
 //
+const array = [
+  { id: 1, name: 'Alice' },
+  { id: 2, name: 'Bob' },
+  { id: 3, name: 'Charlie' }
+];
+
+console.log(array.find(item => item.id === 2)); // Output: { id: 2, name: 'Bob' }
+console.log(array.find(item => item.id === 4)); // Output: undefined
+console.log(array.findIndex(item => item.id === 2)); // Output: 1
+console.log(array.findIndex(item => item.id === 4)); // Output: -1
+
 
 
 const adrr = [10, 20, 30];
@@ -136,4 +155,76 @@ adrr.forEach((val, index) => {
   console.log(val);// Output: 10, 20 // 30 is skipped due to the return statement 
 });
 
+//regular function
+const obj = {
+  name: "Alice",
+  greet: function () {
+    function sayHello() {
+      console.log(this.name); // ❌ `this` is undefined in strict mode, or `window` in non-strict mode
+    }
+    sayHello();
+  },
+};
 
+obj.greet(); // ❌ Output: undefined (or "Alice" in non-strict mode)
+
+//arrow function
+const obj1 = {
+  name: "Alice",
+  greet: function () {
+    const sayHello = () => {
+      console.log(this.name); // ✅ `this` refers to `obj` due to lexical scope
+    };
+    sayHello();
+  },
+};
+
+obj1.greet(); // ✅ Output: "Alice"
+
+
+const obj2 = {
+  name: 'Object',
+  regularMethod: function() {
+    console.log(this.name); // Output: Object
+  },
+  arrowMethod: () => {
+    console.log(this.name); // Output: undefined
+    // arrow function does not have its own this so it will take this from its parent scope
+    // in this case, the parent scope is the global scope so it will log undefined
+    
+  }
+};
+
+obj2.regularMethod(); // Output: Object
+obj2.arrowMethod(); // Output: undefined
+
+
+function partition(array, predicate) {
+  return array.reduce(
+    (result, element) => {
+      result[predicate(element) ? 0 : 1].push(element);
+      return result;
+    },
+    [[], []]
+  );
+}
+
+const numbersj = [1, 2, 3, 4, 5];
+const [evens, odds] = partition(numbersj, num => num % 2 === 0);
+console.log(evens); // [2, 4]
+console.log(odds);  // [1, 3, 5]
+
+const data = [
+  { id: 1, values: [10, 20] },
+  { id: 2, values: [30, 40] }
+];
+
+const Aresult = data
+  .map(item => item.values)//[
+                           //  [10, 20],  // Extracted from { id: 1, values: [10, 20] }
+                           //  [30, 40]   // Extracted from { id: 2, values: [30, 40] }
+                           //]
+  .reduce((acc, values) => acc.concat(values), []) //[10, 20, 30, 40] // Flattened array
+  .filter(val => val > 20); //[30, 40] // Filtered values greater than 20
+
+console.log(Aresult);

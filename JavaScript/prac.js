@@ -1,6 +1,7 @@
 const arr = [1, 2, 3];
-arr[-1] = 4;
-console.log(arr.length);
+arr[-1] = 4; // setting a value to an array index that doesn't exist
+arr[-2] = 5; // setting another value to a non-existent index
+console.log(arr.length); // 3
 
 class Test {
     constructor() {
@@ -193,7 +194,8 @@ console.log(Math.floor(4.9) === Math.trunc(4.9));//true // Math.floor() rounds d
 
 console.log((0.1 + 0.2).toFixed(1) === "0.3");//true // toFixed() method to round a number to a specified number of decimal places
                                                     // 0.1 + 0.2 = 0.3000000000000000 toFixed(1) = 0.3
-console.log("100" - "50" + "10" * 2);
+console.log("100" - "50" + "10" * 2); // 70 
+                                      // JavaScript automatically converts strings to numbers when using the - and * operators
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -213,3 +215,58 @@ async function processSteps() {
 }
 
 processSteps();
+
+
+console.log("Start of script");
+
+async function fetchData() {
+    console.log("Fetching data at first..."); // Output: Fetching data at first...
+    await delay(2000); // Wait 2 seconds
+    return Promise.resolve("Data received at last Output after 2s");
+}
+
+fetchData().then(console.log);// Output after 2s: Data received at last
+
+console.log("End of script");
+
+async function test() {
+  throw new Error("Something went wrong!");
+}
+
+//test();
+//console.log("Hello sdadasdasdsa");//Uncaught Error: Something went wrong! but "Hello sdadasdasdsa" will be printed
+
+/*
+async function demo() {
+  console.log(`demo 1`);//
+  await Promise.resolve();
+  console.log(`demo 2`);
+}
+console.log(`demo 3`); // synchronous runs first
+//} here would make the output: demo 1, demo 4, demo 2, demo 3
+demo();//function call since it is async it will run after synchronous code and will return a promise implicitly
+       // Output: demo 3, demo 1, demo 4, demo 2
+console.log(`demo 4`);
+*/
+async function demo() {
+  console.log(`demo 1`);
+  await Promise.resolve();
+  console.log(`demo 2`);
+}
+
+console.log(`demo 3`);
+setTimeout(() => console.log(`demo 5`), 0);
+demo();
+console.log(`demo 4`);
+//Output: 3, 1, 4, 2, 5
+
+
+async function foo() {
+  return 10;
+}
+async function bar() {
+  let x = foo(); // Promise.resolve(10).
+  console.log(await x + 5);//AWAIT will wait for the promise to resolve and then add 5 to it
+}
+bar();
+

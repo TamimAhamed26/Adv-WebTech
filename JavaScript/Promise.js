@@ -179,7 +179,7 @@ fetchData()
   }
   
   // Using .then()
-  getNumber().then((num) => console.log(num));
+  getNumber().then((num) => console.log(`getnumber then`,num));
   
   // Using async/await
   async function getAsyncNumber() {
@@ -208,3 +208,62 @@ fetchData()
   
   processSteps();
   
+
+  function delayedSum(a, b) {
+    return new Promise(resolve => {
+        setTimeout(() => resolve(a + b), 1000);
+    });
+  }
+  
+  async function calculate() {
+    let result = await delayedSum(99, 91);
+    console.log(result);
+  }
+  
+  calculate();
+  console.log("Processing...");//Output: Processing... 190
+  
+
+function getNumbert() {
+    return Promise.resolve(462);
+}
+
+async function printNumbert() {
+    let numll = await getNumbert();
+    console.log(numll);//Output: 462
+}
+printNumbert();
+console.log("Done it will be printed first");//Output: Done it will be printed first
+
+
+function asyncMultiply(a, b) {
+  return new Promise(resolve => setTimeout(() => resolve(a * b), 2000));
+}
+
+async function compute() {
+  console.log(await asyncMultiply(2, 5));//Output: 10 after 2s and waiting
+  console.log("After multiplication");
+}
+
+compute();
+console.log("Waiting...");//Output: Waiting... 10, After multiplication
+
+
+async function double(x) {
+  return x * 2;
+}
+console.log(double(10) instanceof Promise);//Output: true
+
+
+async function fetchData0() {
+  let response = fetch("https://example.com");
+  console.log(response);
+}
+fetchData0();//Output: Promise { < pending > }
+
+
+var Aarray = [1, 2, 3, 4, 5]; // const Aarray ; will throw an error, var and let will work 
+                              // because we are reassigning the value of Aarray
+Aarray = Aarray.map(num => num * 2); // [2, 4, 6, 8, 10]
+Aarray = Aarray.filter(num => num > 5);//[6, 8, 10]
+console.log(Aarray); 
