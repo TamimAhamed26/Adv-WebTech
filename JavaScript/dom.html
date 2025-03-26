@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced To-Do List</title>
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #000;
+            --task-bg: #fff;
+            --task-shadow: rgba(0, 0, 0, 0.2);
+        }
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #fff;
+            --task-bg: #1e1e1e;
+            --task-shadow: rgba(255, 255, 255, 0.2);
+        }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: 0.3s;
+        }
+        #taskList {
+            list-style-type: none;
+            padding: 0;
+            max-width: 400px;
+            margin: auto;
+        }
+        .task {
+            background: var(--task-bg);
+            padding: 10px;
+            margin: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 5px;
+            cursor: grab;
+            box-shadow: 0px 2px 5px var(--task-shadow);
+            transition: 0.2s;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+        .delete-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .due-date {
+            font-size: 12px;
+            color: gray;
+            margin-left: 10px;
+        }
+        .category {
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .priority {
+            font-size: 12px;
+            font-weight: bold;
+            padding: 3px 7px;
+            border-radius: 5px;
+            color: white;
+        }
+        .high { background: red; }
+        .medium { background: orange; }
+        .low { background: green; }
+        .dark-mode-btn {
+            margin: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .draggable {
+            cursor: grab;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>To-Do List</h2>
+    <button class="dark-mode-btn" id="toggleDarkMode">🌙 Toggle Dark Mode</button>
+
+    <input type="text" id="taskInput" placeholder="Enter a task..." />
+    <input type="date" id="dueDateInput" />
+    
+    <select id="categoryInput">
+        <option value="Personal">Personal</option>
+        <option value="Work">Work</option>
+        <option value="Others">Others</option>
+    </select>
+
+    <select id="priorityInput">
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+    </select>
+
+    <button id="addTaskBtn">Add Task</button>
+    <ul id="taskList"></ul>
+
+    <script>
+        const taskInput = document.getElementById("taskInput");
+        const dueDateInput = document.getElementById("dueDateInput");
+        const categoryInput = document.getElementById("categoryInput");
+        const priorityInput = document.getElementById("priorityInput");
+        const addTaskBtn = document.getElementById("addTaskBtn");
+        const taskList = document.getElementById("taskList");
+        const toggleDarkMode = document.getElementById("toggleDarkMode");
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadTasks();
+            if (localStorage.getItem("darkMode") === "enabled") {
+                document.body.classList.add("dark-mode");
+            }
+        });
+
+        function loadTasks() {
+            const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            savedTasks.forEach(task => createTaskElement(task.text, task.completed, task.dueDate, task.category, task.priority));
+        }
+
+        function saveTasks() {
+            const tasks = [];
+            document.querySelectorAll(".task").forEach(taskElement => {
+                tasks.push({
+                    text: taskElement.querySelector(".task-text").textContent,
+                    completed: taskElement.classList.contains("completed"),
+                    dueDate: taskElement.querySelector(".due-date").textContent,
+                    category: taskElement.querySelector(".category").textContent,
+                    priority: taskElement.dataset.priority
+                });
+            });
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+
+        function createTaskElement(taskText, isCompleted = false, dueDate = "", category = "Personal", priority = "medium") {
+            const li = document.createElement("li");
+            li.classList.add("task", "draggable");
+            li.dataset.priority = priority;
+            if (isCompleted) li.classList.add("completed");
+
+            li.setAttribute("draggable", true);
+
+            const span = document.createElement("span");
+            span.classList.add("task-text");
+            span.textContent = taskText;
+            li.appendChild(span);
+
+            const dateSpan = document.createElement("span");
+            dateSpan.classList.add("due-date");
+            dateSpan.textContent = dueDate ? `Due: ${dueDate}` : "";
+            li.appendChild(dateSpan);
+
+            const categorySpan = document.createElement("span");
+            categorySpan.classList.add("category");
+            categorySpan.textContent = category;
+            li.appendChild(categorySpan);
+
+            const prioritySpan = document.createElement("span");
+            prioritySpan.classList.add("priority", priority);
+            prioritySpan.textContent = priority.toUpperCase();
+            li.appendChild(prioritySpan);
+
+            li.addEventListener("click", () => {
+                li.classList.toggle("completed");
+                saveTasks();
+            });
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "X";
+            deleteBtn.classList.add("delete-btn");
+            li.appendChild(deleteBtn);
+
+            deleteBtn.addEventListener("click", (event) => {
+                event.stopPropagation();
+                li.remove();
+                saveTasks();
+            });
+
+            taskList.appendChild(li);
+            saveTasks();
+            addDragAndDrop();
+        }
+
+        function addTask() {
+            const taskText = taskInput.value.trim();
+            const dueDate = dueDateInput.value;
+            const category = categoryInput.value;
+            const priority = priorityInput.value;
+            if (taskText === "") return;
+            createTaskElement(taskText, false, dueDate, category, priority);
+            taskInput.value = "";
+            dueDateInput.value = "";
+        }
+
+        addTaskBtn.addEventListener("click", addTask);
+        taskInput.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") addTask();
+        });
+
+        function addDragAndDrop() {
+            const tasks = document.querySelectorAll(".draggable");
+            tasks.forEach(task => {
+                task.addEventListener("dragstart", () => task.classList.add("dragging"));
+                task.addEventListener("dragend", () => {
+                    task.classList.remove("dragging");
+                    saveTasks();
+                });
+            });
+
+            taskList.addEventListener("dragover", (event) => {
+                event.preventDefault();
+                const draggingTask = document.querySelector(".dragging");
+                const afterElement = getDragAfterElement(taskList, event.clientY);
+                if (afterElement == null) {
+                    taskList.appendChild(draggingTask);
+                } else {
+                    taskList.insertBefore(draggingTask, afterElement);
+                }
+            });
+        }
+
+        function getDragAfterElement(container, y) {
+            return [...container.querySelectorAll(".draggable:not(.dragging)")]
+                .reduce((closest, child) => {
+                    const box = child.getBoundingClientRect();
+                    const offset = y - box.top - box.height / 2;
+                    return offset < 0 && offset > closest.offset ? { offset, element: child } : closest;
+                }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        toggleDarkMode.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" : "disabled");
+        });
+    </script>
+
+</body>
+</html>
