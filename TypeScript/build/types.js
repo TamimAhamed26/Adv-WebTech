@@ -3,7 +3,11 @@
 let number = 3;
 console.log(number); // 3
 //union type// | (pipe) is used to separate the types // union type allows to use multiple types for a variable
-let value;
+//let mixed: string[] | number[]; // values can be string array or number array.cannot be both at the same time
+//mixed = ["apple", 1]; // must be either only strings or only numbers, not a mix.
+//(string | number)[] //can be used to declare an array of mixed types
+// [string | number] //is wrong // has to be (string | number)
+let value; // value can be number or string 
 value = 42; // Allowed  
 value = "Hello"; // Allowed  
 //value = true; // Error: Type 'boolean' is not assignable  
@@ -97,6 +101,8 @@ persona[1] = 30; //  Allowed (number expected)
 console.log(persona[1]); //  30 
 let employee = ["John"];
 console.log(employee[1]); // Output: undefined
+//let arr: [number] = [1];      // Tuple
+//let arr: number[] = [1];      // Array
 function getLocation(location) {
     console.log(`X: ${location[0]}, Y: ${location[1]}`);
 }

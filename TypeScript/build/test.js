@@ -1,6 +1,7 @@
 "use strict";
-let a = 3;
-let b = 5;
-let c = a * b;
-console.log(c); // 15
+function sidentity(value) {
+    return value;
+}
+console.log(sidentity("Hello"));
+console.log(sidentity(42));
 //# sourceMappingURL=test.js.map
